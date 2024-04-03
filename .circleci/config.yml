@@ -29,9 +29,6 @@ jobs:
 # Orchestrate our job run sequence
 
 jobs_list: &jobs_list
- - build
- - test
- - regression
 
 
 workflows:
@@ -42,13 +39,11 @@ workflows:
           filters:
             branches:
               only: main
+      - when: << pipeline.parameters.run >>
     jobs:
-      - *jobs_list
-
-  regression_pack_manual:
-    when: << pipeline.parameters.run >>
-    jobs:
-      - *jobs_list
+      - build
+      - test
+      - regression
 
   build_and_test:
     unless: << pipeline.parameters.run >>
