@@ -29,14 +29,16 @@ jobs:
 
 workflows:
   regression_pack_cron:
-    when: [ regression, << pipeline.parameters.action >> ]
+    when: 
+      equal: [ regression, << pipeline.parameters.action >> ]
     jobs:
       - build
       - test
       - regression
 
   build_and_test:
-    unless: [ build, << pipeline.parameters.action >> ]
+    when: 
+      equal: [ build, << pipeline.parameters.action >> ]
     jobs:
       - build
       - test
