@@ -46,8 +46,7 @@ workflows:
 
   regression_pack_manual:
     when: << pipeline.parameters.run >>
-    jobs:
-      - *jobs_list
+    jobs: *jobs_list
 
 
   build_and_test:
