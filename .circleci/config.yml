@@ -39,11 +39,16 @@ workflows:
           filters:
             branches:
               only: main
-      - when: << pipeline.parameters.run >>
-    jobs:
+    jobs: &jobs_list
       - build
       - test
       - regression
+
+  regression_pack_manual:
+    when: << pipeline.parameters.run >>
+    jobs:
+      - *jobs_list
+
 
   build_and_test:
     unless: << pipeline.parameters.run >>
