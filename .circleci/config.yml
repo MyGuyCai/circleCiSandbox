@@ -1,7 +1,7 @@
 version: 2.1
 
 parameters:
-  run:
+  action:
     type: enum
     enum: [build, regression]
     default: build
