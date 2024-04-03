@@ -34,7 +34,7 @@ workflows:
       - build
 
   build_and_test:
-    when: << pipeline.parameters.run >> == false
+    unless: << pipeline.parameters.run >>
     jobs:
       - build
       - test
