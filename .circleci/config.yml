@@ -2,8 +2,9 @@ version: 2.1
 
 parameters:
   run:
-    type: boolean
-    default: false
+    type: enum
+    enum: [build, regression]
+    default: build
 
 # Define the jobs we want to run for this project
 jobs:
@@ -26,31 +27,16 @@ jobs:
       - checkout
       - run: echo "regression"
 
-# Orchestrate our job run sequence
-
-jobs_list: &jobs_list
-
-
 workflows:
   regression_pack_cron:
-    triggers:
-      - schedule:
-          cron: '0 8,10,12,14,16 * * 1-5'
-          filters:
-            branches:
-              only: main
-    jobs: &jobs_list
+    when: [ regression, << pipeline.parameters.action >> ]
+    jobs:
       - build
       - test
       - regression
 
-  regression_pack_manual:
-    when: << pipeline.parameters.run >>
-    jobs: *jobs_list
-
-
   build_and_test:
-    unless: << pipeline.parameters.run >>
+    unless: [ build, << pipeline.parameters.action >> ]
     jobs:
       - build
       - test
