@@ -27,9 +27,15 @@ jobs:
       - run: echo "regression"
 
 # Orchestrate our job run sequence
+
+jobs_list: &jobs_list
+ - build
+ - test
+ - regression
+
+
 workflows:
-  regression_pack:
-    when: << pipeline.parameters.run >>
+  regression_pack_cron:
     triggers:
       - schedule:
           cron: '0 8,10,12,14,16 * * 1-5'
@@ -37,7 +43,12 @@ workflows:
             branches:
               only: main
     jobs:
-      - build
+      - *jobs_list
+
+  regression_pack_manual:
+    when: << pipeline.parameters.run >>
+    jobs:
+      - *jobs_list
 
   build_and_test:
     unless: << pipeline.parameters.run >>
